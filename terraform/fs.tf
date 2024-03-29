@@ -32,21 +32,21 @@ resource "google_vpc_access_connector" "connector" {
 # 3. Comment out the google_filestore_instance.instance resource.
 # ---------------------------------------------------
 
- module "nfs" {
-   source  = "DeimosCloud/nfs/google"
-   version = "1.0.1"
-   # insert the 5 required variables here
-   name_prefix = "${var.app_name}-nfs"
-   # labels      = local.common_labels
-   # subnetwork  = module.vpc.public_subnetwork
-   attach_public_ip = true
-   project       = var.project
-   network       = "default"
-   machine_type  = "e2-small"
-   source_image_project  = "debian-cloud"
-   image_family  = "debian-11-bullseye-v20230629"
-   export_paths  = [
-     "/share/mage",
-   ]
-   capacity_gb = "50"
- }
+module "nfs" {
+  source  = "DeimosCloud/nfs/google"
+  version = "1.0.1"
+  # insert the 5 required variables here
+  name_prefix = "${var.app_name}-nfs"
+  # labels      = local.common_labels
+  # subnetwork  = module.vpc.public_subnetwork
+  attach_public_ip     = true
+  project              = var.project
+  network              = "default"
+  machine_type         = "e2-small"
+  source_image_project = "debian-cloud"
+  image_family         = "debian-11-bullseye-v20230629"
+  export_paths = [
+    "/share/mage",
+  ]
+  capacity_gb = "50"
+}

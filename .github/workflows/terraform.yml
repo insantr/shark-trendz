@@ -28,18 +28,32 @@ jobs:
 
     - name: Login to Google Artifact Registry
       id: auth
-      uses: 'google-github-actions/auth@v0'
+      uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
     # Authenticate Docker to Google Cloud Artifact Registry
-    - name: Docker Auth
-      id: docker-auth
+#    - name: Docker Auth
+#      id: docker-auth
+#      uses: 'docker/login-action@v1'
+#      with:
+#        username: 'oauth2accesstoken'
+#        password: '${{ steps.auth.outputs.access_token }}'
+#        registry: '${{ env.REGION }}-docker.pkg.dev'
+
+    - name: Login to Google Artifact Registry2
       uses: 'docker/login-action@v1'
       with:
-        username: 'oauth2accesstoken'
-        password: '${{ steps.auth.outputs.access_token }}'
-        registry: '${{ env.REGION }}-docker.pkg.dev'
+        registry: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}
+        username: _json_key
+        password: ${{ secrets.GCP_CREDENTIALS }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest2
+
 
     - name: Build and Push Container
       run: |

@@ -99,7 +99,7 @@ variable "database_password" {
 variable "docker_image" {
   type        = string
   description = "The Docker image url in the Artifact Registry repository to be deployed to Cloud Run"
-  default     = "europe-southwest1-docker.pkg.dev/shark-trendz/mage-data-prep/mageai"
+  default     = "europe-southwest1-docker.pkg.dev/shark-trendz/mage-data-prep/mageai:latest"
 }
 
 variable "domain" {

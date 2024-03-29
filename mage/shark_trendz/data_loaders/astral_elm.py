@@ -8,7 +8,7 @@ if 'test' not in globals():
 @data_loader
 def load_data_from_file(*args, **kwargs):
     """
-    Template2 for loading data from filesystem.
+    Template3 for loading data from filesystem.
     Load data from 1 file or multiple file directories.
 
     For multiple directories, use the following:

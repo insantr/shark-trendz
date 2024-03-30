@@ -108,7 +108,7 @@ resource "google_cloud_run_service" "run_service" {
         }
         env {
           name = "GOOGLE_APPLICATION_CREDENTIALS"
-          value = '/home/secrets/gcp_credentials.json'
+          value = "/home/secrets/gcp_credentials.json"
         }
         env {
           name  = "MAGE_DATABASE_CONNECTION_URL"

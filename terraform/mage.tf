@@ -135,7 +135,6 @@ resource "google_cloud_run_service" "run_service" {
           }
         }
       }
-      service_account_name = google_service_account.default.email
     }
 
     metadata {
@@ -166,7 +165,8 @@ resource "google_cloud_run_service" "run_service" {
   autogenerate_revision_name = true
 
   # Waits for the Cloud Run API to be enabled
-  depends_on = [google_project_service.cloudrun]
+  depends_on = [google_project_service.cloudrun,
+    google_secret_manager_secret.service-account-key]
 }
 
 # Allow unauthenticated users to invoke the service

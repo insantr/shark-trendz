@@ -135,6 +135,7 @@ resource "google_cloud_run_service" "run_service" {
           }
         }
       }
+      service_account_name = google_service_account.cloud_run_account.email
     }
 
     metadata {

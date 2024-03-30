@@ -127,7 +127,7 @@ resource "google_cloud_run_service" "run_service" {
         name = "secret-volume"
 
         secret {
-          secret_name = google_secret_manager_secret.service-account-key.id
+          secret_name = google_secret_manager_secret.service-account-key.secret_id
 
           items {
             key  = "latest"

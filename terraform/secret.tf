@@ -7,6 +7,6 @@ resource "google_secret_manager_secret" "service-account-key" {
 }
 
 resource "google_secret_manager_secret_version" "service-account-key-version" {
-  secret      = google_secret_manager_secret.service-account-key.id
+  secret      = google_secret_manager_secret.service-account-key.name
   secret_data = file(var.service_account_key_file)
 }

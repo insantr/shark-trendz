@@ -120,11 +120,11 @@ resource "google_cloud_run_service" "run_service" {
         }
         volume_mounts {
           mount_path = "/home/secrets"
-          name       = "secret-volume"
+          name       = "secretvolume"
         }
       }
       volumes {
-        name = "secret-volume"
+        name = "secretvolume"
 
         secret {
           secret_name = google_secret_manager_secret.service_account_key.id

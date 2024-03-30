@@ -1,5 +1,5 @@
 resource "google_secret_manager_secret" "service_account_key" {
-  secret_id = "service-account-key"
+  secret_id = "serviceaccountkey"
 
   replication {
     automatic = true

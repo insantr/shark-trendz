@@ -78,6 +78,7 @@ jobs:
       env:
         GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
         TF_VAR_docker_image: '${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}'
+        TF_VAR_service_account_key_file: '${{ secrets.GCP_CREDENTIALS }}'
 
 #    - name: Deploy to Cloud Run
 #      id: deploy

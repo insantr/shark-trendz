@@ -24,25 +24,6 @@ provider "google" {
 }
 
 
-resource "google_storage_bucket" "data_bucket" {
-  name          = "shark-trendz-data-lake"
-  location      = var.region
-  force_destroy = true
-  storage_class = var.gcs_storage_class
-
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age = 30 # days
-    }
-  }
-}
-
-
-
 #resource "google_bigquery_dataset" "shark_dataset" {
 #  dataset_id = var.bq_dataset_name
 #  location   = var.location

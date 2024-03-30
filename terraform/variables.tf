@@ -96,6 +96,10 @@ variable "database_password" {
 #  description = "The docker image to deploy to Cloud Run."
 #  default     = "mageai/mageai:latest"
 #}
+#locals {
+#  docker_image_url = "${var.region}-docker.pkg.dev/${var.project}/${var.repository}/mageai:latest"
+#}
+
 variable "docker_image" {
   type        = string
   description = "The Docker image url in the Artifact Registry repository to be deployed to Cloud Run"
@@ -112,4 +116,9 @@ variable "ssl" {
   description = "Run load balancer on HTTPS and provision managed certificate with provided `domain`."
   type        = bool
   default     = false
+}
+
+variable "service_account_key_file" {
+  description = "Patch to JSON file google service account"
+  type        = string
 }

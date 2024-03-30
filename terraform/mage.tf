@@ -107,6 +107,10 @@ resource "google_cloud_run_service" "run_service" {
           value = var.app_name
         }
         env {
+          name = "GOOGLE_APPLICATION_CREDENTIALS"
+          value = '/home/secrets/gcp_credentials.json'
+        }
+        env {
           name  = "MAGE_DATABASE_CONNECTION_URL"
           value = "postgresql://${var.database_user}:${var.database_password}@/${var.app_name}-db?host=/cloudsql/${google_sql_database_instance.instance.connection_name}"
         }
@@ -114,21 +118,23 @@ resource "google_cloud_run_service" "run_service" {
           name  = "ULIMIT_NO_FILE"
           value = 16384
         }
-        # volume_mounts {
-        #   mount_path = "/secrets/bigquery"
-        #   name       = "secret-bigquery-key"
-        # }
+        volume_mounts {
+          mount_path = "/home/secrets"
+          name       = "secret-volume"
+        }
       }
-      # volumes {
-      #   name = "secret-bigquery-key"
-      #   secret {
-      #     secret_name  = "bigquery_key"
-      #     items {
-      #       key  = "latest"
-      #       path = "bigquery_key"
-      #     }
-      #   }
-      # }
+      volumes {
+        name = "secret-volume"
+
+        secret {
+          secret_name = google_secret_manager_secret.service_account_key.id
+
+          items {
+            key  = "latest"
+            path = "gcp_credentials.json"
+          }
+        }
+      }
     }
 
     metadata {

@@ -24,7 +24,23 @@ provider "google" {
 }
 
 
-#resource "google_bigquery_dataset" "shark_dataset" {
-#  dataset_id = var.bq_dataset_name
-#  location   = var.location
-#}
+# Create a service account for my-service
+resource "google_service_account" "my_service" {
+  account_id   = "my-service"
+  display_name = "My Service service account"
+}
+
+# Set permissions on service account
+resource "google_project_iam_binding" "my_service" {
+  project = var.project
+
+  for_each = toset([
+    "run.invoker",
+    "secretmanager.secretAccessor",
+    "cloudsql.admin",
+  ])
+
+  role       = "roles/${each.key}"
+  members    = ["serviceAccount:${google_service_account.my_service.email}"]
+  depends_on = [google_service_account.my_service]
+}

@@ -7,6 +7,7 @@
 
 locals {
   data_lake_bucket = "shark-trendz_data_lake"
+  #  docker_image_url = "${var.region}-docker.pkg.dev/${var.project}/${var.repository}/mageai:latest"
 }
 
 
@@ -18,36 +19,24 @@ variable "project" {
 
 variable "region" {
   description = "Region"
-  #Update the below to your desired region
   default = "europe-southwest1"
 }
 
 variable "location" {
   description = "Project Location"
-  #Update the below to your desired location
   default = "EU"
 }
 
-#variable "bq_dataset_name" {
-#  description = "My BigQuery Dataset Name"
-#  #Update the below to what you want your dataset to be called
-#  default     = "terraform_demo_412714_dataset"
-#}
-
-#variable "gcs_bucket_name" {
-#  description = "My Storage Bucket Name"
-#  #Update the below to a unique bucket name
-#  default     = "terraform-demo-412714-terra-bucket"
-#}
+variable "gcs_bucket_name" {
+  description = "My Storage Bucket Name"
+  #Update the below to a unique bucket name
+  default     = "shark-trendz-data-lake"
+}
 
 variable "gcs_storage_class" {
   description = "Bucket Storage Class"
   default     = "STANDARD"
 }
-
-
-
-
 
 variable "app_name" {
   type        = string
@@ -64,7 +53,6 @@ variable "container_memory" {
   description = "Container memory"
   default     = "2G"
 }
-
 
 variable "zone" {
   type        = string
@@ -90,15 +78,6 @@ variable "database_password" {
   sensitive   = true
   default     = "mageuser"
 }
-
-#variable "docker_image" {
-#  type        = string
-#  description = "The docker image to deploy to Cloud Run."
-#  default     = "mageai/mageai:latest"
-#}
-#locals {
-#  docker_image_url = "${var.region}-docker.pkg.dev/${var.project}/${var.repository}/mageai:latest"
-#}
 
 variable "docker_image" {
   type        = string

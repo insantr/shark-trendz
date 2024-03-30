@@ -99,16 +99,16 @@ resource "google_cloud_run_service" "run_service" {
           value = var.project
         }
         env {
+          name  = "GCS_BUCKET"
+          value = var.gcs_bucket_name
+        }
+        env {
           name  = "GCP_REGION"
           value = var.region
         }
         env {
           name  = "GCP_SERVICE_NAME"
           value = var.app_name
-        }
-        env {
-          name = "GOOGLE_APPLICATION_CREDENTIALS"
-          value = "/home/secrets/gcp_credentials.json"
         }
         env {
           name  = "MAGE_DATABASE_CONNECTION_URL"
@@ -135,6 +135,7 @@ resource "google_cloud_run_service" "run_service" {
           }
         }
       }
+#      service_account_name = google_service_account.my_service.email
     }
 
     metadata {
@@ -157,7 +158,6 @@ resource "google_cloud_run_service" "run_service" {
   metadata {
     annotations = {
       "run.googleapis.com/launch-stage" = "BETA"
-      #      "run.googleapis.com/ingress"      = "internal-and-cloud-load-balancing"
       "run.googleapis.com/ingress" = "all"
     }
   }
@@ -166,7 +166,7 @@ resource "google_cloud_run_service" "run_service" {
 
   # Waits for the Cloud Run API to be enabled
   depends_on = [google_project_service.cloudrun,
-    google_secret_manager_secret.service-account-key]
+    google_secret_manager_secret_version.service-account-key-version]
 }
 
 # Allow unauthenticated users to invoke the service

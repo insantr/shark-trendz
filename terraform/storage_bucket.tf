@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "data_bucket" {
-  name          = "shark-trendz-data-lake"
+  name          = var.gcs_bucket_name
   location      = var.region
   force_destroy = true
   storage_class = var.gcs_storage_class

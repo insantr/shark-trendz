@@ -16,35 +16,12 @@ def export_data_to_big_query(df: DataFrame, **kwargs) -> None:
 
     Docs: https://docs.mage.ai/design/data-loading#bigquery
     """
-    from google.cloud import bigquery
-    import os
+    table_id = f'{os.getenv("GCP_PROJECT_ID")}.your_dataset.your_table_name'
+    config_path = path.join(get_repo_path(), 'io_config2.yaml')
+    config_profile = 'default'
 
-    # Инициализируем клиент BigQuery
-    client = bigquery.Client()
-
-    project_id = os.getenv('PROJECT_ID')
-    dataset_id = 'tmp_dataset1'
-    table_id = 'tmp_table1'
-    full_table_id = f"{project_id}.{dataset_id}.{table_id}"
-
-    # Проверяем существование датасета, если нет - создаем
-    dataset_ref = client.dataset(dataset_id)
-    try:
-        client.get_dataset(dataset_ref)
-    except Exception:
-        # Создаем датасет
-        dataset = bigquery.Dataset(dataset_ref)
-        dataset = client.create_dataset(dataset)
-        print(f"Датасет {dataset_id} создан.")
-
-    # Определяем настройки задания
-    job_config = bigquery.LoadJobConfig()
-    job_config.schema = [
-        bigquery.SchemaField("Date", "INTEGER"),
-        bigquery.SchemaField("Year", "INTEGER"),
-    ]
-    job_config.write_disposition = bigquery.WriteDisposition.WRITE_TRUNCATE
-
-    # Загружаем DataFrame в BigQuery
-    job = client.load_table_from_dataframe(df, full_table_id, job_config=job_config)
-    job.result()  # Ожидаем завершения загрузки
+    BigQuery.with_config(ConfigFileLoader(config_path, config_profile)).export(
+        df,
+        table_id,
+        if_exists='replace',  # Specify resolution policy if table name already exists
+    )

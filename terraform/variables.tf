@@ -1,116 +1,112 @@
-#variable "credentials" {
-#  description = "My Credentials"
-#  default     = "./keys/my-cred.json"
-#  #ex: if you have a directory where this file is called keys with your service account json file
-#  #saved there as my-creds.json you could use default = "./keys/my-creds.json"
-#}
-
+# Define local variables for easy reuse throughout the Terraform configuration
 locals {
+  # Name of the data lake bucket in GCS
   data_lake_bucket = "shark-trendz_data_lake"
-  #  docker_image_url = "${var.region}-docker.pkg.dev/${var.project}/${var.repository}/mageai:latest"
+  # Fully qualified Docker image name including the region, project, repository, and tag
+  docker_image = "${var.region}-docker.pkg.dev/${var.project}/${var.repository}/mageai:${var.docker_image_tag}"
 }
 
+# Define variables with descriptions, types, and default values
 
 variable "project" {
   type        = string
-  description = "The name of the project"
+  description = "The GCP project ID."
   default     = "shark-trendz"
 }
 
 variable "region" {
-  description = "Region"
-  default = "europe-southwest1"
+  description = "The GCP region where resources will be created."
+  default     = "europe-southwest1"
 }
 
 variable "location" {
-  description = "Project Location"
-  default = "EU"
+  description = "Geographic location for the project resources, such as 'EU' for Europe."
+  default     = "EU"
 }
 
 variable "gcs_bucket_name" {
-  description = "My Storage Bucket Name"
-  #Update the below to a unique bucket name
+  description = "Name of the Google Cloud Storage bucket for the data lake."
   default     = "shark-trendz-data-lake"
 }
 
 variable "gcs_storage_class" {
-  description = "Bucket Storage Class"
+  description = "Storage class of the GCS bucket (e.g., STANDARD, NEARLINE)."
   default     = "STANDARD"
 }
 
 variable "app_name" {
   type        = string
-  description = "Application Name"
+  description = "Name of the application for which resources are provisioned."
   default     = "mage-data-prep"
 }
 
 variable "container_cpu" {
-  description = "Container cpu"
+  description = "The amount of CPU allocated for the container, in millicores (e.g., '2000m' for 2 cores)."
   default     = "2000m"
 }
 
 variable "container_memory" {
-  description = "Container memory"
+  description = "The amount of memory allocated for the container (e.g., '2G' for 2 GiB)."
   default     = "2G"
 }
 
 variable "zone" {
   type        = string
-  description = "The default compute zone"
+  description = "The GCP compute zone for resource deployment."
   default     = "europe-southwest1-a"
 }
 
 variable "repository" {
   type        = string
-  description = "The name of the Artifact Registry repository to be created"
+  description = "Name of the Artifact Registry repository where Docker images are stored."
   default     = "mage-data-prep"
 }
 
 variable "database_user" {
   type        = string
-  description = "The username of the Postgres database."
+  description = "Username for accessing the PostgreSQL database."
   default     = "mageuser"
 }
 
 variable "database_password" {
   type        = string
-  description = "The password of the Postgres database."
+  description = "Password for the PostgreSQL database user."
   sensitive   = true
   default     = "mageuser"
 }
 
-variable "docker_image" {
+variable "docker_image_tag" {
   type        = string
-  description = "The Docker image url in the Artifact Registry repository to be deployed to Cloud Run"
-  default     = "europe-southwest1-docker.pkg.dev/shark-trendz/mage-data-prep/mageai:latest"
+  description = "Tag of the Docker image to be deployed."
+  default     = "latest"
 }
 
 variable "domain" {
-  description = "Domain name to run the load balancer on. Used if `ssl` is `true`."
+  description = "The domain name for the load balancer, used when SSL is enabled."
   type        = string
   default     = ""
 }
 
 variable "ssl" {
-  description = "Run load balancer on HTTPS and provision managed certificate with provided `domain`."
+  description = "Whether to enable SSL for the load balancer. If true, a managed SSL certificate is provisioned."
   type        = bool
   default     = false
 }
 
 variable "service_account_key_file" {
-  description = "Patch to JSON file google service account"
+  description = "Path to the JSON file containing the Google service account credentials."
   type        = string
-  default = "/home/secret/gcp_credential.json"
+  default     = "/home/secret/gcp_credential.json"
 }
 
 variable "bigquery_dataset_name" {
-  description = "Name of dataset"
-  type = string
-  default = "shark_trendz_dataset"
+  description = "Name of the BigQuery dataset to be used."
+  type        = string
+  default     = "shark_trendz_dataset"
 }
 
 variable "bigquery_table_name" {
-  description = "Name of bigquery table"
-  type = string
-  default = "shark_trendz_main"
+  description = "Name of the main BigQuery table within the dataset."
+  type        = string
+  default     = "shark_trendz_main"
 }

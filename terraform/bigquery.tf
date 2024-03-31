@@ -1,29 +1,39 @@
+# Defines a resource for creating a dataset in Google BigQuery
 resource "google_bigquery_dataset" "default" {
-  dataset_id                      = var.bigquery_dataset_name
-#  default_partition_expiration_ms = 2592000000  # 30 days
-#  default_table_expiration_ms     = 31536000000 # 365 days
-  description                     = "dataset description"
-  location                        = "EU"
-#  max_time_travel_hours           = 96 # 4 days
+  # Specifies the dataset ID, with its value taken from Terraform variables
+  dataset_id = var.bigquery_dataset_name
 
+  # Provides a description for the dataset for identification purposes
+  description = "dataset description"
+
+  # Specifies the geographic location where the dataset is stored
+  location = var.location
+
+  # Assigns labels to the dataset for resource management, such as for billing grouping or indicating data sensitivity
   labels = {
     billing_group = "accounting",
     pii           = "sensitive"
   }
 }
 
+# Defines a resource for creating a table within the BigQuery dataset
 resource "google_bigquery_table" "default" {
-  dataset_id          = google_bigquery_dataset.default.dataset_id
-  table_id            = var.bigquery_table_name
-  deletion_protection = false # set to "true" in production
+  # References the dataset ID where the table will be created
+  dataset_id = google_bigquery_dataset.default.dataset_id
 
+  # Specifies the table ID, with its value taken from Terraform variables
+  table_id = var.bigquery_table_name
+
+  # Disables deletion protection for the table
+  deletion_protection = false
+
+  # Configures time partitioning for the table on a yearly basis based on the "Date" field
   time_partitioning {
-    type          = "YEAR"
-    field         = "Date"
-#    expiration_ms = 432000000 # 5 days
+    type  = "YEAR"
+    field = "Date"
   }
-#  require_partition_filter = true
 
+  # Describes the table's schema in JSON format within a multiline string block
   schema = <<EOF
 [
   {

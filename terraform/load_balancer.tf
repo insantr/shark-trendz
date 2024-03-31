@@ -1,12 +1,13 @@
-# load_balancer.tf | Load Balancer Configuration
-
+# Retrieves the caller's IP address using an HTTP data source.
 data "http" "myip" {
   url = "http://ipv4.icanhazip.com"
 }
 
+# Creates a Google Cloud Compute security policy.
 resource "google_compute_security_policy" "policy" {
   name = "${var.app_name}-security-policy"
 
+  # Rule to allow traffic from the caller's IP address.
   rule {
     action   = "allow"
     priority = "100"
@@ -32,6 +33,7 @@ resource "google_compute_security_policy" "policy" {
   #   description = "Whitelist IP for specific endpoints"
   # }
 
+  # A default rule to deny all other traffic.
   rule {
     action   = "deny(403)"
     priority = "2147483647"
@@ -45,6 +47,7 @@ resource "google_compute_security_policy" "policy" {
   }
 }
 
+# Defines a network endpoint group for a Cloud Run service, making it accessible via a load balancer.
 resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
   name                  = "${var.app_name}-neg"
   network_endpoint_type = "SERVERLESS"
@@ -54,6 +57,7 @@ resource "google_compute_region_network_endpoint_group" "cloudrun_neg" {
   }
 }
 
+# Sets up an HTTP load balancer using a module from the Terraform Registry.
 module "lb-http" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 6.3"
@@ -65,6 +69,7 @@ module "lb-http" {
   https_redirect                  = var.ssl
   labels                          = { "example-label" = "cloud-run-example" }
 
+  # Configures the backend for the load balancer, associating it with the network endpoint group and security policy.
   backends = {
     default = {
       description = null

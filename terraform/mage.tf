@@ -1,14 +1,3 @@
-# main.tf
-
-#terraform {
-#  required_version = ">= 0.14"
-#
-#  required_providers {
-#    # Cloud Run support was added on 3.3.0
-#    google = ">= 3.3"
-#  }
-#}
-
 # #############################################
 # #               Enable API's                #
 # #############################################
@@ -69,23 +58,24 @@ resource "google_project_service" "compute" {
 
 # Create the Cloud Run service
 resource "google_cloud_run_service" "run_service" {
-  name     = var.app_name
-  location = var.region
+  name     = var.app_name # The name of the Cloud Run service, derived from a variable.
+  location = var.region   # The GCP region where the service will be deployed.
 
   template {
     spec {
       containers {
-        image   = var.docker_image
-        command = ["mage", "start", "shark_trendz", "--manage-instance", "1"]
+        image   = local.docker_image                                          # The Docker image to run in the container.
+        command = ["mage", "start", "shark_trendz", "--manage-instance", "1"] # Command to start the application.
         ports {
-          container_port = 6789
+          container_port = 6789 # The port that the container listens on.
         }
         resources {
           limits = {
-            cpu    = var.container_cpu
-            memory = var.container_memory
+            cpu    = var.container_cpu    # CPU limit for the container.
+            memory = var.container_memory # Memory limit for the container.
           }
         }
+        # Environment variables for the container to configure application behavior.
         env {
           name  = "FILESTORE_IP_ADDRESS"
           value = module.nfs.internal_ip
@@ -126,55 +116,60 @@ resource "google_cloud_run_service" "run_service" {
           name  = "ULIMIT_NO_FILE"
           value = 16384
         }
+
+        # Mounts a volume for secrets, allowing secure access to sensitive information.
         volume_mounts {
           mount_path = "/home/secrets"
           name       = "secret-volume"
         }
       }
+
+      # Configuration of the volume where secrets are stored.
       volumes {
         name = "secret-volume"
-
         secret {
           secret_name = google_secret_manager_secret.service-account-key.secret_id
-
           items {
             key  = "latest"
             path = "gcp_credentials.json"
           }
         }
       }
-#      service_account_name = google_service_account.my_service.email
+      service_account_name = google_service_account.my_service.email
     }
 
     metadata {
+      # Annotations to customize and configure the Cloud Run service's behavior.
       annotations = {
-        "autoscaling.knative.dev/minScale"         = "1"
-        "run.googleapis.com/cloudsql-instances"    = google_sql_database_instance.instance.connection_name
-        "run.googleapis.com/cpu-throttling"        = false
-        "run.googleapis.com/execution-environment" = "gen2"
-        "run.googleapis.com/vpc-access-connector"  = google_vpc_access_connector.connector.id
-        "run.googleapis.com/vpc-access-egress"     = "private-ranges-only"
+        "autoscaling.knative.dev/minScale"         = "1"                                                   # Ensures at least one instance is always running.
+        "run.googleapis.com/cloudsql-instances"    = google_sql_database_instance.instance.connection_name # Configures Cloud SQL connection.
+        "run.googleapis.com/cpu-throttling"        = "false"                                               # Disables CPU throttling.
+        "run.googleapis.com/execution-environment" = "gen2"                                                # Uses the second generation execution environment.
+        "run.googleapis.com/vpc-access-connector"  = google_vpc_access_connector.connector.id              # Configures VPC access for the service.
+        "run.googleapis.com/vpc-access-egress"     = "private-ranges-only"                                 # Limits egress to private IP ranges.
       }
     }
   }
 
+  # Configuration for routing traffic to the service.
   traffic {
-    percent         = 100
-    latest_revision = true
+    percent         = 100  # Sends 100% of traffic to the latest revision.
+    latest_revision = true # Indicates that traffic should always go to the latest revision.
   }
 
   metadata {
+    # Additional annotations to control service behavior and access.
     annotations = {
-      "run.googleapis.com/launch-stage" = "BETA"
-      "run.googleapis.com/ingress" = "all"
+      "run.googleapis.com/launch-stage" = "BETA" # Marks the service as being in the BETA launch stage.
+      "run.googleapis.com/ingress"      = "all"  # Allows requests from all sources.
     }
   }
 
   autogenerate_revision_name = true
 
-  # Waits for the Cloud Run API to be enabled
+  # Ensures that dependencies, such as enabling the Cloud Run API and creating a secret version, are resolved before creating this service.
   depends_on = [google_project_service.cloudrun,
-    google_secret_manager_secret_version.service-account-key-version]
+  google_secret_manager_secret_version.service-account-key-version]
 }
 
 # Allow unauthenticated users to invoke the service

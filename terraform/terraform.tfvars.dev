@@ -1,1 +1,1 @@
-bigquery_key_file = "path/to/your/bigquery-key.json"
+service_account_key_file = "/path/to/your/gcp_credential.json"

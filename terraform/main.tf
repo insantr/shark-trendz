@@ -23,7 +23,6 @@ provider "google" {
   zone    = var.zone
 }
 
-
 # Create a service account for my-service
 resource "google_service_account" "my_service" {
   account_id   = "my-service"
@@ -38,8 +37,7 @@ resource "google_project_iam_binding" "my_service" {
     "run.invoker",
     "secretmanager.secretAccessor",
     "cloudsql.admin",
-
-#    "bigquery.admin",
+    "bigquery.admin",
   ])
 
   role       = "roles/${each.key}"

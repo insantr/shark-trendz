@@ -1,5 +1,5 @@
 # SharkTrendz: Stories from the Depths
-![logo](assets/logo.png "SharkTrend Logo")
+<img style="float: right;" width="400px" src="assets/logo.png" />
 
 ## Overview
 As the final endeavor within the  [DEZoomcamp 2024 course](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main), I'm profoundly thankful to [DataTalksClub](https://github.com/DataTalksClub) for orchestrating such an impactful course and graciously offering it at no cost—a gesture I find truly remarkable. 

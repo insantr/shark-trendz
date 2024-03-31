@@ -1,0 +1,24 @@
+triggers:
+- envs: []
+  last_enabled_at: 2024-03-31 15:07:56.815094
+  name: Daily update
+  pipeline_uuid: load_data_to_gcs
+  schedule_interval: '@daily'
+  schedule_type: time
+  settings:
+    landing_time_enabled: false
+  sla: null
+  start_time: 2024-03-31 15:06:00
+  status: active
+  variables: {}
+- envs: []
+  last_enabled_at: 2024-03-31 19:14:05.203639
+  name: Initial trigger
+  pipeline_uuid: load_data_to_gcs
+  schedule_interval: '@once'
+  schedule_type: time
+  settings: null
+  sla: null
+  start_time: 2024-03-31 16:07:00
+  status: active
+  variables: {}

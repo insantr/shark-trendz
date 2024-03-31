@@ -65,7 +65,7 @@ resource "google_cloud_run_service" "run_service" {
     spec {
       containers {
         image   = local.docker_image                                          # The Docker image to run in the container.
-        command = ["mage", "start", "shark_trendz", "--manage-instance", "1"] # Command to start the application.
+        command = ["mage", "start", "shark_trendz"] # Command to start the application.
         ports {
           container_port = 6789 # The port that the container listens on.
         }

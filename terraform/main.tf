@@ -38,6 +38,8 @@ resource "google_project_iam_binding" "my_service" {
     "run.invoker",
     "secretmanager.secretAccessor",
     "cloudsql.admin",
+
+#    "bigquery.admin",
   ])
 
   role       = "roles/${each.key}"

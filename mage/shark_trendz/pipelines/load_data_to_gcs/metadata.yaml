@@ -4,14 +4,15 @@ blocks:
   configuration:
     file_source:
       path: data_exporters/export_to_bg.py
-  downstream_blocks: []
+  downstream_blocks:
+  - ephemeral_glitter
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: export_to_bg
   retry_config: null
-  status: updated
+  status: executed
   timeout: null
   type: data_exporter
   upstream_blocks:
@@ -78,12 +79,37 @@ blocks:
   language: python
   name: load_to_bucket2
   retry_config: null
-  status: updated
+  status: failed
   timeout: null
   type: data_exporter
   upstream_blocks:
   - remove_dot_in_columns
   uuid: load_to_bucket2
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    dbt:
+      command: run
+    dbt_profile_target: dev
+    dbt_project_name: dbt/shark_trendz
+    disable_query_preprocessing: false
+    export_write_policy: append
+    file_source:
+      path: dbts/ephemeral_glitter.yaml
+    use_raw_sql: false
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: yaml
+  name: ephemeral glitter
+  retry_config: null
+  status: executed
+  timeout: null
+  type: dbt
+  upstream_blocks:
+  - export_to_bg
+  uuid: ephemeral_glitter
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
@@ -105,7 +131,6 @@ settings:
 spark_config: {}
 tags: []
 type: python
-updated_at: '2024-03-30 19:58:53'
 uuid: load_data_to_gcs
 variables_dir: /home/src/mage_data/shark_trendz
 widgets: []

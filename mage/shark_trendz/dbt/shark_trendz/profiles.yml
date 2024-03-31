@@ -1,0 +1,14 @@
+shark_trendz:
+  outputs:
+    dev:
+      dataset: shark_trendz_dataset
+      fixed_retries: 1
+      keyfile: /home/secrets/gcp_credentials.json
+      # location: EU
+      method: service-account
+      priority: interactive
+      project: shark-trendz
+      threads: 4
+      timeout_seconds: 300
+      type: bigquery
+  target: dev

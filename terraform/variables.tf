@@ -100,4 +100,17 @@ variable "ssl" {
 variable "service_account_key_file" {
   description = "Patch to JSON file google service account"
   type        = string
+  default = "/home/secret/gcp_credential.json"
+}
+
+variable "bigquery_dataset_name" {
+  description = "Name of dataset"
+  type = string
+  default = "shark_trendz_dataset"
+}
+
+variable "bigquery_table_name" {
+  description = "Name of bigquery table"
+  type = string
+  default = "shark_trendz_main"
 }

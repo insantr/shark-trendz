@@ -1,0 +1,34 @@
+
+version: 2
+
+sources:
+  - name: staging
+    database: shark-trendz
+    schema: shark_trendz_dataset
+    tables:
+      - name: shark_trendz_main
+
+models:
+  - name: prepared_shark_attack
+    description: "Dataset of shark attack"
+    columns:
+      - name: date_incident
+        description: "Date of incident"
+        tests:
+          - not_null
+      - name: type_incident
+        description: "Type of incident"
+        tests:
+          - not_null
+      - name: country
+        description: "Country where incident happened"
+      - name: state
+        description: "State where incident happened"
+      - name: location
+        description: "Location where incident happened"
+      - name: activity
+      - name: sex
+      - name: is_fatal
+        tests:
+          - not_null
+      - name: age

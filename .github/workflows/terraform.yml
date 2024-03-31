@@ -30,12 +30,6 @@ jobs:
         username: _json_key
         password: ${{ secrets.GCP_CREDENTIALS }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        push: true
-        tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
@@ -48,6 +42,17 @@ jobs:
         terraform init
       env:
         GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
+
+    - name: Apply Terraform Docker Registry
+      run: |
+        cd terraform
+        terraform apply -auto-approve -input=false -target=google_artifact_registry_repository.my_docker_repo -target=google_service_account.docker_pusher -target=google_artifact_registry_repository_iam_member.docker_pusher_iam
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
     - name: Apply Terraform
       run: |

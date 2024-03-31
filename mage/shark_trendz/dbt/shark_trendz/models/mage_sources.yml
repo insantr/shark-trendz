@@ -1,0 +1,14 @@
+sources:
+- description: Dataframes Mage upstream blocks
+  loader: mage
+  name: mage_shark_trendz
+  schema: shark_trendz_dataset
+  tables:
+  - description: Dataframe for block `export_to_bg` of the `load_data_to_gcs` mage
+      pipeline.
+    identifier: mage_load_data_to_gcs_export_to_bg
+    meta:
+      block_uuid: export_to_bg
+      pipeline_uuid: load_data_to_gcs
+    name: load_data_to_gcs_export_to_bg
+version: 2

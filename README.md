@@ -1,5 +1,7 @@
-# SharkTrendz: Stories from the Depths
-![logo](assets/logo.png "SharkTrend Logo")
+# SharkTrendz: Stories from the Depths 
+<img width="350px" src="assets/logo.png" /> 
+
+[![Build and Deploy](https://github.com/insantr/shark-trendz/actions/workflows/terraform.yml/badge.svg?branch=main)](https://github.com/insantr/shark-trendz/actions/workflows/terraform.yml)
 
 ## Overview
 As the final endeavor within the  [DEZoomcamp 2024 course](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main), I'm profoundly thankful to [DataTalksClub](https://github.com/DataTalksClub) for orchestrating such an impactful course and graciously offering it at no cost—a gesture I find truly remarkable. 

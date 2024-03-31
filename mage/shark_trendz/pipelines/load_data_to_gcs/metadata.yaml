@@ -1,25 +1,6 @@
 blocks:
 - all_upstream_blocks_executed: true
   color: null
-  configuration:
-    file_source:
-      path: data_exporters/export_to_bg.py
-  downstream_blocks:
-  - ephemeral_glitter
-  executor_config: null
-  executor_type: local_python
-  has_callback: false
-  language: python
-  name: export_to_bg
-  retry_config: null
-  status: executed
-  timeout: null
-  type: data_exporter
-  upstream_blocks:
-  - remove_dot_in_columns
-  uuid: export_to_bg
-- all_upstream_blocks_executed: true
-  color: null
   configuration: {}
   downstream_blocks:
   - transform_date_column
@@ -45,17 +26,16 @@ blocks:
   language: python
   name: transform_date_column
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: transformer
   upstream_blocks:
   - load_shark_attack_file
   uuid: transform_date_column
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
   downstream_blocks:
-  - export_to_bg
   - load_to_bucket2
   executor_config: null
   executor_type: local_python
@@ -63,29 +43,30 @@ blocks:
   language: python
   name: remove_dot_in_columns
   retry_config: null
-  status: executed
+  status: updated
   timeout: null
   type: transformer
   upstream_blocks:
   - transform_date_column
   uuid: remove_dot_in_columns
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration: {}
-  downstream_blocks: []
+  downstream_blocks:
+  - bucket_to_bigquery
   executor_config: null
   executor_type: local_python
   has_callback: false
   language: python
   name: load_to_bucket2
   retry_config: null
-  status: failed
+  status: updated
   timeout: null
   type: data_exporter
   upstream_blocks:
   - remove_dot_in_columns
   uuid: load_to_bucket2
-- all_upstream_blocks_executed: true
+- all_upstream_blocks_executed: false
   color: null
   configuration:
     dbt:
@@ -108,8 +89,33 @@ blocks:
   timeout: null
   type: dbt
   upstream_blocks:
-  - export_to_bg
+  - bucket_to_bigquery
   uuid: ephemeral_glitter
+- all_upstream_blocks_executed: false
+  color: grey
+  configuration:
+    data_provider: bigquery
+    data_provider_database: ''
+    data_provider_profile: default
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: append
+    limit: 1000
+    use_raw_sql: true
+  downstream_blocks:
+  - ephemeral_glitter
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: bucket_to_bigquery
+  retry_config: null
+  status: updated
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - load_to_bucket2
+  uuid: bucket_to_bigquery
 cache_block_output_in_memory: false
 callbacks: []
 concurrency_config: {}
@@ -124,7 +130,9 @@ extensions: {}
 name: load_data_to_gcs
 notification_config: {}
 remote_variables_dir: null
-retry_config: {}
+retry_config:
+  delay: 10
+  retries: 3
 run_pipeline_in_one_process: false
 settings:
   triggers: null

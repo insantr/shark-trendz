@@ -12,7 +12,7 @@ triggers:
   status: active
   variables: {}
 - envs: []
-  last_enabled_at: 2024-03-31 19:14:05.203639
+  last_enabled_at: 2024-03-31 21:35:01.199271
   name: Initial trigger
   pipeline_uuid: load_data_to_gcs
   schedule_interval: '@once'

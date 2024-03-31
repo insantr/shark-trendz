@@ -50,11 +50,11 @@ variable "container_memory" {
   default     = "2G"
 }
 
-variable "zone" {
-  type        = string
-  description = "The GCP compute zone for resource deployment."
-  default     = "europe-southwest1-a"
-}
+#variable "zone" {
+#  type        = string
+#  description = "The GCP compute zone for resource deployment."
+#  default     = "europe-southwest1-a"
+#}
 
 variable "repository" {
   type        = string
@@ -105,8 +105,8 @@ variable "bigquery_dataset_name" {
   default     = "shark_trendz_dataset"
 }
 
-variable "bigquery_table_name" {
-  description = "Name of the main BigQuery table within the dataset."
-  type        = string
-  default     = "shark_trendz_main"
-}
+#variable "bigquery_table_name" {
+#  description = "Name of the main BigQuery table within the dataset."
+#  type        = string
+#  default     = "shark_trendz_main"
+#}

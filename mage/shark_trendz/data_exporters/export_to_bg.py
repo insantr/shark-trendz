@@ -18,7 +18,7 @@ def export_data_to_big_query(df: DataFrame, **kwargs) -> None:
     Docs: https://docs.mage.ai/design/data-loading#bigquery
     """
     table_id = f'{os.getenv("GCP_PROJECT_ID")}.{os.getenv("BQ_DATASET_NAME")}.{os.getenv("BQ_TABLE_NAME")}'
-    config_path = path.join(get_repo_path(), 'io_config2.yaml')
+    config_path = path.join(get_repo_path(), 'io_config.yaml')
     config_profile = 'default'
 
     BigQuery.with_config(ConfigFileLoader(config_path, config_profile)).export(

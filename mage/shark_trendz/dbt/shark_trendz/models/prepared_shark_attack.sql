@@ -1,5 +1,12 @@
 
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    partition_by={
+      "field": "date_incident",
+      "data_type": "date",
+      "granularity": "year"
+    }
+) }}
 
 
 WITH source_data AS (
@@ -12,7 +19,7 @@ WITH source_data AS (
     Activity as activity,
     Age as age,
     CASE
-        WHEN `Unnamed:_11` = 'Y' THEN TRUE
+        WHEN `Unnamed__11` = 'Y' THEN TRUE
         ELSE FALSE
     END AS if_fatal,
     CASE

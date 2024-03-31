@@ -4,11 +4,11 @@ sources:
   name: mage_shark_trendz
   schema: shark_trendz_dataset
   tables:
-  - description: Dataframe for block `export_to_bg` of the `load_data_to_gcs` mage
-      pipeline.
-    identifier: mage_load_data_to_gcs_export_to_bg
+  - description: Dataframe for block `bucket_to_bigquery` of the `load_data_to_gcs`
+      mage pipeline.
+    identifier: mage_load_data_to_gcs_bucket_to_bigquery
     meta:
-      block_uuid: export_to_bg
+      block_uuid: bucket_to_bigquery
       pipeline_uuid: load_data_to_gcs
-    name: load_data_to_gcs_export_to_bg
+    name: load_data_to_gcs_bucket_to_bigquery
 version: 2

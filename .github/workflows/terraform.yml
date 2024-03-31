@@ -44,6 +44,8 @@ jobs:
         GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
 
     - name: Apply Terraform Docker Registry
+      env:
+        GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
       run: |
         cd terraform
         terraform apply -auto-approve -input=false -target=google_artifact_registry_repository.my_docker_repo -target=google_service_account.docker_pusher -target=google_artifact_registry_repository_iam_member.docker_pusher_iam

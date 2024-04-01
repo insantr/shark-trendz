@@ -1,7 +1,5 @@
-# SharkTrendz: Stories from the Depths 
-<img width="350px" src="assets/logo.png" /> 
-
-[![Build and Deploy](https://github.com/insantr/shark-trendz/actions/workflows/terraform.yml/badge.svg?branch=main)](https://github.com/insantr/shark-trendz/actions/workflows/terraform.yml)
+# SharkTrendz: Stories from the Depths
+<img style="text-align: center;" width="400px" src="assets/logo.png" />
 
 ## Overview
 As the final endeavor within the  [DEZoomcamp 2024 course](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main), I'm profoundly thankful to [DataTalksClub](https://github.com/DataTalksClub) for orchestrating such an impactful course and graciously offering it at no cost—a gesture I find truly remarkable. 
@@ -29,12 +27,54 @@ In this project, we will utilize a suite of modern technologies to build a robus
 ![image](assets/pipeline_flow.png "Pipeline Flow")
 
 The pipeline includes the following key components:
-- With the use of the MageAI orchestrator, we construct an ETL pipeline that facilitates the loading of data from an XLS file acquired from https://www.sharkattackfile.net/, and subsequently transfers it to Google Cloud Storage (GCS). Afterward, the data is extracted from GCS and uploaded to the BigQuery service for further analysis.
+- With the use of the MageAI orchestrator, we construct an ETL pipeline that facilitates the loading of data from an XLS file acquired from https://www.sharkattackfile.net/spreadsheets/GSAF5.xls, and subsequently transfers it to Google Cloud Storage (GCS). Afterward, the data is extracted from GCS and uploaded to the BigQuery service for further analysis.
 - Next, leveraging the capabilities of dbt, data transformation is carried out, which encompasses the conversion of data types, their cleansing, and standardization.
 - In the final stage, to enhance the efficiency of query processing, data in BigQuery is structured into partitions based on the year.
 
 ## Dashboard
-TBD
+Dashboard is available [here](https://lookerstudio.google.com/s/sI8kI_11dcs). Note that it will not be updated after April 2023.
+![img](assets/dashboard_screenshot.png)
 
-## Reproducing
-TBD
+## Deployment Instructions
+1. Before starting, make sure to read the instructions in the [predefined deploy document](predefined_deploy_readme.md). 
+It provides detailed, step-by-step guidelines for configuring the necessary tools and services for the deployment.
+2. Clone the project's GitHub repository to your local machine:
+    ```shell
+    git clone https://github.com/insantr/shark-trendz.git
+    cd shark-trendz
+    ```
+3. Copy a Terraform variable file based on the template `terraform/terraform.tfvars.tmp`:
+    ```shell
+    cp terraform/terraform.tfvars.tmp terraform/terraform.tfvars
+    ```
+4. Replace default values in `terraform/terraform.tfvars` with your values.
+   - `service_account_key_file` - Full path to the JSON key file for the Google service account. (Note: if you follow instruction from [predefined deploy document](predefined_deploy_readme.md) your key file locate in  `~/.config/gcloud/shark-trendz-sa.json`)
+   - `project` - The GCP project ID.
+   - `region` - The GCP region where resources will be created.
+5. Init Terraform
+    ```shell
+    terraform -chdir=terraform init -backend=false
+    ```
+6. Creates an Artifact Registry Repository for Docker containers:
+    ```shell
+    terraform -chdir=terraform apply \
+        -target=google_artifact_registry_repository.my_docker_repo \
+        -target=google_service_account.docker_pusher \
+        -target=google_artifact_registry_repository_iam_member.docker_pusher_iam
+    ```
+7. Build and Push Docker images to an Artifact Registry Repository
+    ```shell
+    gcloud auth configure-docker <YOUR_GCP_REGION>-docker.pkg.dev
+    docker build -t <YOUR_GCP_REGION>-docker.pkg.dev/shark-trendz/mage-data-prep/mageai:latest ./
+    docker push <YOUR_GCP_REGION>-docker.pkg.dev/shark-trendz/mage-data-prep/mageai:latest
+    ```
+8. Deploy **SharkTrendz** to Google Cloud
+    ```shell
+    terraform -chdir=terraform apply
+    ```
+9. After the deployment process completes, you will see a link to MageAI in the console, Follow this link to access your MageAI instance.:
+![img](assets/terminal_output_screenshot_1.png)
+10. You will find two triggers: `Initial trigger` and `Daily update`. Wait until the `Initial trigger` status changes to `completed`.
+![img](assets/mageai_triggers_screenshot.png)
+11. All set!
+A copy of the original dashboards is located [here](https://lookerstudio.google.com/s/sI8kI_11dcs) and can be used as a template to reproduce the dashboard. To adapt it to your needs, create a copy and connect your own data sources.

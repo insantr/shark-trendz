@@ -19,11 +19,6 @@ variable "region" {
   default     = "europe-southwest1"
 }
 
-variable "location" {
-  description = "Geographic location for the project resources, such as 'EU' for Europe."
-  default     = "EU"
-}
-
 variable "gcs_bucket_name" {
   description = "Name of the Google Cloud Storage bucket for the data lake."
   default     = "shark-trendz-data-lake"
@@ -49,12 +44,6 @@ variable "container_memory" {
   description = "The amount of memory allocated for the container (e.g., '2G' for 2 GiB)."
   default     = "2G"
 }
-
-#variable "zone" {
-#  type        = string
-#  description = "The GCP compute zone for resource deployment."
-#  default     = "europe-southwest1-a"
-#}
 
 variable "repository" {
   type        = string
@@ -104,9 +93,3 @@ variable "bigquery_dataset_name" {
   type        = string
   default     = "shark_trendz_dataset"
 }
-
-#variable "bigquery_table_name" {
-#  description = "Name of the main BigQuery table within the dataset."
-#  type        = string
-#  default     = "shark_trendz_main"
-#}

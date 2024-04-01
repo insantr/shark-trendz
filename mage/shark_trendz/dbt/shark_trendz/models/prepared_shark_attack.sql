@@ -12,7 +12,10 @@
 WITH source_data AS (
   SELECT
     Date as date_incident,
-    Type as type_incident,
+    CASE
+        WHEN `Type` = '?' THEN null
+        ELSE TRIM(Type)
+    END AS type_incident,
     Country as country,
     State as state,
     Location as location,

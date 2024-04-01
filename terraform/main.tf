@@ -5,15 +5,6 @@ terraform {
       version = ">= 3.3"
     }
   }
-  backend "remote" {
-    # The name of your Terraform Cloud organization.
-    organization = "shark-trendz-organization"
-
-    # The name of the Terraform Cloud workspace to store Terraform state files in.
-    workspaces {
-      name = "shark-trendz-workspace"
-    }
-  }
 }
 
 provider "google" {

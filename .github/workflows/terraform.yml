@@ -39,6 +39,7 @@ jobs:
     - name: Initialize Terraform
       run: |
         cd terraform
+        cp backend.tmp backend.tf
         terraform init
       env:
         GOOGLE_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
